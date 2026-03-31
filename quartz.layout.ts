@@ -17,6 +17,18 @@ export const sharedPageComponents: SharedLayout = {
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
+    Component.Graph({
+      localGraph: {
+        depth: 2,
+        scale: 1,
+        repelForce: 0.5,
+        centerForce: 0.3,
+        linkDistance: 40,
+        fontSize: 0.6,
+        focusOnHover: true,
+        showTags: false,
+      },
+    }),
     Component.ConditionalRender({
       component: Component.Breadcrumbs(),
       condition: (page) => page.fileData.slug !== "index",
@@ -41,7 +53,6 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer(),
   ],
   right: [
-    Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
   ],

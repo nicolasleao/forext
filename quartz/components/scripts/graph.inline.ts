@@ -497,30 +497,73 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
   }
 
   if (enableZoom) {
-    select<HTMLCanvasElement, NodeData>(app.canvas).call(
-      zoom<HTMLCanvasElement, NodeData>()
-        .extent([
-          [0, 0],
-          [width, height],
-        ])
-        .scaleExtent([0.25, 4])
-        .on("zoom", ({ transform }) => {
-          currentTransform = transform
-          stage.scale.set(transform.k, transform.k)
-          stage.position.set(transform.x, transform.y)
+    const zoomBehavior = zoom<HTMLCanvasElement, NodeData>()
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .scaleExtent([0.25, 4])
+      .on("zoom", ({ transform }) => {
+        currentTransform = transform
+        stage.scale.set(transform.k, transform.k)
+        stage.position.set(transform.x, transform.y)
 
-          // zoom adjusts opacity of labels too
-          const scale = transform.k * opacityScale
-          let scaleOpacity = Math.max((scale - 1) / 3.75, 0)
-          const activeNodes = nodeRenderData.filter((n) => n.active).flatMap((n) => n.label)
+        // zoom adjusts opacity of labels too
+        const zoomScale = transform.k * opacityScale
+        let scaleOpacity = Math.max((zoomScale - 1) / 3.75, 0)
+        const activeNodes = nodeRenderData.filter((n) => n.active).flatMap((n) => n.label)
 
-          for (const label of labelsContainer.children) {
-            if (!activeNodes.includes(label)) {
-              label.alpha = scaleOpacity
-            }
+        for (const label of labelsContainer.children) {
+          if (!activeNodes.includes(label)) {
+            label.alpha = scaleOpacity
           }
-        }),
-    )
+        }
+      })
+
+    const graphCanvas = select<HTMLCanvasElement, NodeData>(app.canvas)
+    graphCanvas.call(zoomBehavior)
+
+    // Tick the simulation to a near-settled state so node positions are stable
+    // before we compute the bounding box for the fit transform.
+    simulation.tick(200)
+
+    // Nodes are rendered at (x + width/2, y + height/2) — D3's origin (0,0)
+    // sits at the canvas centre. We compute the bounding box in D3 space,
+    // then build a transform that maps the graph centre to the canvas centre
+    // at a scale that makes everything fit with padding.
+    const padding = 60
+    const xs = graphData.nodes.map((n) => n.x ?? 0)
+    const ys = graphData.nodes.map((n) => n.y ?? 0)
+    if (xs.length > 0) {
+      const minX = Math.min(...xs)
+      const maxX = Math.max(...xs)
+      const minY = Math.min(...ys)
+      const maxY = Math.max(...ys)
+      const graphW = maxX - minX || 1
+      const graphH = maxY - minY || 1
+      const fitScale = Math.min(
+        (width - padding * 2) / graphW,
+        (height - padding * 2) / graphH,
+        4,
+      )
+      // D3 graph centre in canvas coordinates (before any zoom transform)
+      const canvasCx = (minX + maxX) / 2 + width / 2
+      const canvasCy = (minY + maxY) / 2 + height / 2
+      const initTransform = zoomIdentity
+        .translate(width / 2 - canvasCx * fitScale, height / 2 - canvasCy * fitScale)
+        .scale(fitScale)
+      graphCanvas.call(zoomBehavior.transform, initTransform)
+      currentTransform = initTransform
+
+      // Sync label sizes to fitScale so text appears at a consistent visual
+      // size regardless of how zoomed in the fit lands. `scale` is a let
+      // binding from the config destructure, so reassigning it also updates
+      // renderLabels() which closes over it for defaultScale = 1 / scale.
+      scale = fitScale
+      for (const n of nodeRenderData) {
+        n.label.scale.set(1 / fitScale)
+      }
+    }
   }
 
   let stopAnimation = false

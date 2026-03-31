@@ -1,3 +1,48 @@
 @use "./base.scss";
 
-// put your custom CSS here!
+// ─── Graph container sizing fix ──────────────────────────────────────────────
+// The canvas is sized from .graph-container's offsetHeight. Without an explicit
+// height the div collapses to 0, causing the canvas to default to 250px while
+// the border appears taller. Setting height: 100% lets it inherit from
+// .graph-outer so the canvas fills the full bordered area.
+.graph-outer > .graph-container {
+  height: 100%;
+  width: 100%;
+}
+
+// ─── Forext: Forest of Context ───────────────────────────────────────────────
+//
+// The graph is the forest. On every page it leads — a living map of where this
+// idea sits among its neighbors. Content follows below, grounded in context.
+
+// Hero graph — rendered in beforeBody, above the article title
+.popover-hint > .graph {
+  width: 100%;
+  margin-bottom: 1.5rem;
+
+  // Hide the "Graph" label — the visual speaks for itself
+  & > h3 {
+    display: none;
+  }
+
+  & > .graph-outer {
+    height: 420px;
+    border-color: rgba(126, 200, 160, 0.12);
+    border-width: 1px;
+    border-radius: 8px;
+    background-color: var(--light);
+    box-shadow: none;
+  }
+
+  // Hide the expand-to-global icon on the hero — it's already given full stage
+  & > .graph-outer > .global-graph-icon {
+    display: none;
+  }
+}
+
+// Mobile: shrink hero graph so it doesn't swamp small screens
+@media (max-width: 800px) {
+  .popover-hint > .graph > .graph-outer {
+    height: 280px;
+  }
+}
