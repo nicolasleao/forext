@@ -1,17 +1,36 @@
-# Quartz v4
+# Forext
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+> A context forest — where knowledge grows in relation, not in isolation.
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
+Forext is a personal knowledge system built around the idea that **context is the unit of meaning**. Notes don't exist alone; they exist in relation to one another. The connections between ideas are as important as the ideas themselves.
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+Where a digital garden is tended and curated, a forest grows dense and interconnected. Every node in Forext is not just content — it is context.
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
+## Concept
 
-## Sponsors
+A forest has no single root. It's a distributed network of growth where each tree shapes and is shaped by its neighbors — light, soil, root systems all shared. Forext applies this model to knowledge:
 
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+- **Nodes** are individual notes, concepts, or observations
+- **Edges** are the links between them — explicit connections that carry meaning
+- **The graph is the forest** — the living map that makes context visible at a glance
+
+The graph visualization is the primary interface. It sits above every note, showing where you are in the forest before you read what the note says.
+
+## Structure
+
+```
+content/      — source notes (Markdown / Obsidian)
+quartz/       — underlying engine (Quartz v4)
+quartz.config.ts   — site configuration
+quartz.layout.ts   — layout and component arrangement
+```
+
+## Running locally
+
+```bash
+npx quartz build --serve
+```
+
+## Built on
+
+Forext is a fork of [Quartz v4](https://quartz.jzhao.xyz/) by jackyzha0 — a static site generator for Obsidian notes and digital gardens. The core rendering engine, plugin system, and graph component are all Quartz. Forext is the configuration, philosophy, and content layer on top.

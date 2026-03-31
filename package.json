@@ -1,15 +1,15 @@
 {
-  "name": "@jackyzha0/quartz",
-  "description": "🌱 publish your digital garden and notes as a website",
+  "name": "forext",
+  "description": "a context forest — knowledge that grows in relation, not in isolation",
   "private": true,
   "version": "4.5.2",
   "type": "module",
-  "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+  "author": "nicolasguasca1",
   "license": "MIT",
-  "homepage": "https://quartz.jzhao.xyz",
+  "homepage": "https://forext.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackyzha0/quartz.git"
+    "url": "https://github.com/nicolasguasca1/forext.git"
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
@@ -24,11 +24,13 @@
     "node": ">=22"
   },
   "keywords": [
+    "context-forest",
+    "forext",
+    "knowledge-graph",
+    "digital-garden",
     "site generator",
     "ssg",
-    "digital-garden",
     "markdown",
-    "blog",
     "quartz"
   ],
   "bin": {

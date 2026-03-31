@@ -2,9 +2,9 @@ import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
 /**
- * Quartz 4 Configuration
+ * Forext Configuration — a context forest
  *
- * See https://quartz.jzhao.xyz/configuration for more information.
+ * Built on Quartz v4. See https://quartz.jzhao.xyz/configuration for engine docs.
  */
 const config: QuartzConfig = {
   configuration: {
@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "forext.io",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {
